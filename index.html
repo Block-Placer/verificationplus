@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verify Code</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: rgba(255,255,255,0.05);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    input {
+      padding: 12px;
+      width: 100%;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    button {
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 22px;
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .show {
+      opacity: 1;
+      transform: translateY(10px);
+    }
+
+    .valid {
+      color: #00ff95;
+    }
+
+    .invalid {
+      color: #ff4d4d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Enter Verification Code</h2>
+    <input type="text" id="codeInput" placeholder="Your code here" />
+    <br>
+    <button onclick="verifyCode()">Verify</button>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    async function verifyCode() {
+      const input = document.getElementById("codeInput").value.trim();
+      const result = document.getElementById("result");
+      result.classList.remove("show", "valid", "invalid");
+
+      if (!input) return;
+
+      result.innerText = "Checking...";
+      result.classList.add("show");
+
+      try {
+        const res = await fetch('https://example.com/codes.txt');
+        const text = await res.text();
+        const codes = text.split('\n').map(line => line.trim());
+
+        if (codes.includes(input)) {
+          result.innerText = "✅ Code is valid!";
+          result.classList.add("valid");
+        } else {
+          result.innerText = "❌ Invalid code.";
+          result.classList.add("invalid");
+        }
+      } catch (e) {
+        result.innerText = "⚠️ Error loading code list.";
+        result.classList.add("invalid");
+      }
+    }
+  </script>
+</body>
+</html>
