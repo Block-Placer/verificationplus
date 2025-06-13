@@ -91,7 +91,7 @@
       result.classList.add("show");
 
       try {
-        const res = await fetch('https://example.com/codes.txt');
+        const res = await fetch('https://raw.githubusercontent.com/Block-Placer/verificationplus/refs/heads/main/access/codes.txt');
         const text = await res.text();
         const codes = text.split('\n').map(line => line.trim());
 
